@@ -9,3 +9,7 @@
 ## Classic_Interface.lsp
  功能为恢复CAD经典界面，以及一些个性化设置。<br>
  加载直接运行。<br>
+ 
+## ssget_with_keyword_By_FSXM.lsp
+ 带关键字的ssget，作者是明经CAD社区的FSXM。<br>
+ 引用自http://bbs.mjtd.com/forum.php?mod=viewthread&tid=71545&highlight=ssget<br>

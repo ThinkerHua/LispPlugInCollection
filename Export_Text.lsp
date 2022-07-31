@@ -1,7 +1,7 @@
-;;;å…¨å±€å˜é‡_ET_file_name_, _ET_mode_
-(princ "\nå¯åŠ¨å‘½ä»¤ï¼šET")
-(princ "  åŠŸèƒ½ï¼šå°†é€‰æ‹©çš„æ–‡æœ¬å¯¼å‡ºåˆ°æ–‡æœ¬æ–‡æ¡£(*.txt)")
-(princ "  ä½œè€…ï¼šThinker(ThinkerHua@hotmail.com)")
+;;;È«¾Ö±äÁ¿_ET_file_name_, _ET_mode_
+(princ "\nÆô¶¯ÃüÁî£ºET")
+(princ "  ¹¦ÄÜ£º½«Ñ¡ÔñµÄÎÄ×Öµ¼³öµ½ÎÄ±¾ÎÄµµ(*.txt)")
+(princ "  ×÷Õß£ºThinker(ThinkerHua@hotmail.com)")
 (princ)
 (defun c:ET (/ default_file_name information err_msg file selction selction_name 
              selction_type selction_data txt option mode_old
@@ -12,7 +12,7 @@
           (= msg "quit / exit abort")
       )
       (princ err_msg)
-      (progn (princ (strcat "\nå‡ºé”™ä¿¡æ¯ï¼š" msg)) 
+      (progn (princ (strcat "\nError:" msg)) 
              (setq *Error* nil)
       )
     )
@@ -27,12 +27,12 @@
   (if (= _ET_mode_ nil) 
     (setq _ET_mode_ "A")
   )
-  (setq information (strcat "å½“å‰å‚æ•°ï¼š  å¯¼å‡ºæ–‡ä»¶=" 
+  (setq information (strcat "µ±Ç°²ÎÊı£º  µ¼³öÎÄ¼ş=" 
                             _ET_file_name_
-                            "  å†™å…¥æ¨¡å¼="
+                            "  Ğ´ÈëÄ£Ê½="
                             (cond 
-                              ((= _ET_mode_ "A") "è¿½åŠ ")
-                              ((= _ET_mode_ "W") "è¦†ç›–")
+                              ((= _ET_mode_ "A") "×·¼Ó")
+                              ((= _ET_mode_ "W") "¸²¸Ç")
                             )
                     )
   )
@@ -45,7 +45,7 @@
   (while (= loop T) 
     (initget 0 "S F M")
     (setq option (getkword 
-                   "\né€‰æ‹©æ“ä½œï¼š[é€‰æ‹©æ–‡å­—(S)/å¯¼å‡ºæ–‡ä»¶(F)/å†™å…¥æ¨¡å¼(M)/]<S>:"
+                   "\nÑ¡Ôñ²Ù×÷£º[Ñ¡ÔñÎÄ×Ö(S)/µ¼³öÎÄ¼ş(F)/Ğ´ÈëÄ£Ê½(M)/]<S>:"
                  )
     )
     (cond 
@@ -54,26 +54,26 @@
        (setq selction (ssget '((0 . "TEXT,MTEXT"))))
       )
       ((= option "F")
-       (setq _ET_file_name_ (getfiled "æŒ‡å®šå¯¼å‡ºæ–‡ä»¶" _ET_file_name_ "txt" 1))
+       (setq _ET_file_name_ (getfiled "Ö¸¶¨µ¼³öÎÄ¼ş" _ET_file_name_ "txt" 1))
        (cond 
          ((= _ET_file_name_ nil)
           (setq _ET_file_name_ default_file_name)
-          (princ (strcat "\næœªæŒ‡å®šå¯¼å‡ºæ–‡ä»¶ï¼Œå°†è®¾ç½®ä¸ºé»˜è®¤æ–‡ä»¶ï¼š" _ET_file_name_))
+          (princ (strcat "\nÎ´Ö¸¶¨µ¼³öÎÄ¼ş£¬ÉèÖÃÎªÄ¬ÈÏÎÄ¼ş£º" _ET_file_name_))
          )
-         (T (princ (strcat "\næŒ‡å®šå¯¼å‡ºæ–‡ä»¶ï¼š" _ET_file_name_)))
+         (T (princ (strcat "\nÖ¸¶¨µ¼³öÎÄ¼ş£º" _ET_file_name_)))
        )
       )
       ((= option "M")
        (initget 0 "A W")
        (setq mode_old  _ET_mode_
-             _ET_mode_ (getkword (strcat "\nå†™å…¥æ¨¡å¼ï¼š[è¿½åŠ (A)/è¦†ç›–(W)]<" _ET_mode_ ">ï¼š"))
+             _ET_mode_ (getkword (strcat "\nĞ´ÈëÄ£Ê½£º[×·¼Ó(A)/¸²¸Ç(W)]<" _ET_mode_ ">£º"))
        )
        (if (= _ET_mode_ nil) (setq _ET_mode_ mode_old))
        (princ 
-         (strcat "\nå½“å‰å†™å…¥æ¨¡å¼ï¼š" 
+         (strcat "\nµ±Ç°Ğ´ÈëÄ£Ê½£º" 
                  (cond 
-                   ((= _ET_mode_ "A") "è¿½åŠ ")
-                   ((= _ET_mode_ "W") "è¦†ç›–")
+                   ((= _ET_mode_ "A") "×·¼Ó")
+                   ((= _ET_mode_ "W") "¸²¸Ç")
                  )
          )
        )
@@ -82,11 +82,11 @@
     )
   )
   (if (= selction nil) 
-    (progn (setq err_msg "\né€‰æ‹©é›†ä¸ºç©º!") (quit))
+    (progn (setq err_msg "\nÑ¡Ôñ¼¯Îª¿Õ!") (quit))
   )
   (setq file (open _ET_file_name_ _ET_mode_))
   (if (= file nil) 
-    (progn (setq err_msg "\næ–‡ä»¶æ‰“å¼€å¤±è´¥!") (quit))
+    (progn (setq err_msg "\nÎÄ¼ş´ò¿ªÊ§°Ü!") (quit))
   )
   (setq i 0)
   (repeat (sslength selction) 
@@ -102,6 +102,6 @@
     (setq i (1+ i))
   )
   (close file)
-  (princ (strcat "\nå®Œæˆï¼Œå¯¼å‡ºåˆ°æ–‡ä»¶: " _ET_file_name_))
+  (princ (strcat "\nÍê³É£¬µ¼³öµ½ÎÄ¼ş: " _ET_file_name_))
   (prin1)
 )

@@ -1,5 +1,5 @@
 ;;;全局变量_ET_file_name_, _ET_mode_
-(princ "\n启动命令：ET")
+(princ "启动命令：ET")
 (princ "  功能：将选择的文字导出到文本文档(*.txt)")
 (princ "  作者：Thinker(ThinkerHua@hotmail.com)")
 (princ)

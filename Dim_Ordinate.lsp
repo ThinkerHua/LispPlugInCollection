@@ -16,7 +16,7 @@
     ;;;错误处理函数
     (defun *Error* (msg) 
         (if (= msg "quit / exit abort") 
-            (princ err_msg) ;主动退出时，输出自定义错误信息
+            (if (/= err_msg nil) (princ err_msg)) ;主动退出时，输出自定义错误信息
             (progn (princ (strcat "\nError：" msg))  ;其他错误发生时，输出错误信息
                    (setq *Error* nil)
             )
@@ -175,13 +175,12 @@
             (entmod engl_t1)
             (setq engl_t2 (subst (cons 10 tb) (assoc 10 engl_t2) engl_t2))
             (entmod engl_t2)
-            ;画引线：先删除，再重绘
-            ;;;****************************************************************
-            ;;;××××××不知如何更新多段线多个顶点值，暂如此处理××××××
-            ;;;****************************************************************
-            (entdel (cdr (car engl_pl)))
-            (prin_pl pa pb pc)
-            (setq engl_pl (entget (entlast)))
+            (setq engl_pl (update_point_list_of_LWPOLYLINE 
+                              engl_pl
+                              (list (cons '10 pa) (cons '10 pb) (cons '10 pc))
+                          )
+            )
+            (entmod engl_pl)
         )
     )
 
@@ -214,6 +213,23 @@
               (cons 10 p1)
               (cons 10 p2)
               (cons 10 p3)
+        )
+    )
+)
+
+        ;;;更新LWPOLYLINE顶点列表
+(defun update_point_list_of_LWPOLYLINE (pline point_list / new_pline new_point sub_list) 
+    ;这里假设传入的point_list是符合标准的列表
+    ;如果传入的point_list不符合标准，将造成错误，甚至程序崩溃
+    ;有必要的话，应当事先将point_list清洗，剔除不标准数据
+    (setq new_pline nil)
+    (foreach sub_list pline 
+        (if (and (= 10 (car sub_list)) (/= point_list nil)) 
+            (setq new_point  (car point_list)
+                  point_list (cdr point_list)
+                  new_pline  (append new_pline (list new_point))
+            )
+            (setq new_pline (append new_pline (list sub_list)))
         )
     )
 )

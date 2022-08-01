@@ -1,5 +1,5 @@
 ;;;全局变量：fh为文字高度, sc为标注比例, pre为坐标值精度, exc为交换X Y坐标标记
-(princ "启动命令：zb")
+(princ "启动命令：ZB")
 (princ "  功能：坐标标注")
 (princ "  作者：Thinker(ThinkerHua@hotmail.com)")
 (defun c:zb (/ pa pb pc ta tb X Y tbox_x tbox_y sl DimZin_Old mouse engl_t1 engl_t2 engl_pl 

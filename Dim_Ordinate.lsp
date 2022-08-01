@@ -1,212 +1,219 @@
-;;;2016.01.15æ›´æ–°
-;;;pa pb pcä¸ºå¼•çº¿(å¤šæ®µçº¿)é¡¶ç‚¹,ta tbä¸ºæ–‡å­—åŸºç‚¹(å‡ä¸ºå…¨å±€å˜é‡)
-;;;fhä¸ºæ–‡å­—é«˜åº¦,scä¸ºæ ‡æ³¨æ¯”ä¾‹,preä¸ºåæ ‡å€¼ç²¾åº¦,excä¸ºäº¤æ¢X Yåæ ‡æ ‡è®°(å‡ä¸ºå…¨å±€å˜é‡)
-;;;X Yä¸ºåæ ‡,tbox_x tbox_yä¸ºåˆ¤æ–­æ–‡å­—å¯¹è±¡é•¿åº¦ç”¨ä¸´æ—¶åæ ‡å­˜å‚¨å™¨
-;;;slä¸ºæ–‡å­—å¯¹è±¡é•¿åº¦(äº¦å³å¼•çº¿æ°´å¹³æ®µé•¿)
-;;;cycä¸ºå¾ªç¯æ ‡è®°,DimZin_Oldä¸ºç¯å¢ƒå˜é‡ä¸´æ—¶å­˜å‚¨å™¨
-;;;mouseä¸ºåŠ¨æ€é¢„è§ˆæ—¶grreadè¿”å›å€¼ï¼ˆè·å–åæ ‡ç”¨ï¼‰
-;;;engl_t1,engl_t2,engl_plä¸ºæ–‡å­—ã€å¼•çº¿çš„èµ„æ–™ä¸²è¡Œï¼ˆåŠ¨æ€é¢„è§ˆæ—¶ä¸æ–­æ›´æ–°ï¼‰
-(defun c:zb (/        X         Y  tbox_x   tbox_y    sl
-       cyc      DimZin_Old  mouse   engl_t1  engl_t2
-       engl_pl
-      )
+;;;È«¾Ö±äÁ¿£ºfhÎªÎÄ×Ö¸ß¶È, scÎª±ê×¢±ÈÀı, preÎª×ø±êÖµ¾«¶È, excÎª½»»»X Y×ø±ê±ê¼Ç
+(princ "\nÆô¶¯ÃüÁî£ºzb")
+(princ "  ¹¦ÄÜ£º×ø±ê±ê×¢")
+(princ "  ×÷Õß£ºThinker(ThinkerHua@hotmail.com)")
+(defun c:zb (/ pa pb pc ta tb X Y tbox_x tbox_y sl DimZin_Old mouse engl_t1 engl_t2 engl_pl 
+             err_msg fh_old sc_old pre_old
+            ) 
+    ;;;pa pb pcÎªÒıÏß(¶à¶ÎÏß)¶¥µã, ta tbÎªÎÄ×Ö»ùµã
+    ;;;X YÎª×ø±ê, tbox_x tbox_yÎªÅĞ¶ÏÎÄ×Ö¶ÔÏó³¤¶ÈÓÃÁÙÊ±×ø±ê´æ´¢Æ÷
+    ;;;slÎªÎÄ×Ö¶ÔÏó³¤¶È(Òà¼´ÒıÏßË®Æ½¶Î³¤)
+    ;;;DimZin_OldÎª»·¾³±äÁ¿ÁÙÊ±´æ´¢Æ÷
+    ;;;mouseÎª¶¯Ì¬Ô¤ÀÀÊ±grread·µ»ØÖµ£¨»ñÈ¡×ø±êÓÃ£©
+    ;;;engl_t1 engl_t2 engl_plÎªÎÄ×Ö¡¢ÒıÏßµÄ×ÊÁÏ´®ĞĞ£¨¶¯Ì¬Ô¤ÀÀÊ±²»¶Ï¸üĞÂ£©
+    ;;;fh_old sc_old pre_oldÎª¶ÔÓ¦È«¾Ö±äÁ¿µÄÁÙÊ±´æ´¢Æ÷
 
-;;;ç¨‹åºåŠ è½½åˆå§‹åŒ–è®¾ç½®
-  (if (= fh nil)
-    (setq fh 2.5)
-  )
-  (if (= sc nil)
-    (setq sc 0.001)
-  )
-  (if (= pre nil)
-    (setq pre 3)
-  )
-  (if (= exc nil)
-    (setq exc "Y")
-  )
-  (progn
-    (princ "******ä½œè€…ï¼šThinker(ThinkerHua@hotmail.com)******")
-    (princ "\nå½“å‰å‚æ•°å€¼   å­—é«˜ï¼š")
-    (princ fh)
-    (princ "   æ¯”ä¾‹ï¼š")
-    (princ sc)
-    (princ "   ç²¾åº¦ï¼š")
-    (princ pre)
-    (princ "   äº¤æ¢X Yåæ ‡ï¼š")
-    (princ exc)
-  )
-  (setq DimZin_Old (getvar "DimZin"))
-  (setvar "DimZin" 1)
-
-;;;æŒ‡å®šéœ€æ ‡æ³¨çš„ç‚¹æˆ–è®¾ç½®å­—é«˜ã€æ¯”ä¾‹ã€ç²¾åº¦ã€äº¤æ¢X Yåæ ‡
-  (while (and (= cyc nil) (/= (type pa) 'str))
-    (initget "F S P E")
-    (setq
-      pa
-       (getpoint
-   "\næŒ‡å®šè¦æ ‡æ³¨çš„åæ ‡ç‚¹æˆ–[å­—é«˜(F)/æ¯”ä¾‹(S)/ç²¾åº¦(P)/äº¤æ¢X Yåæ ‡(E)]:"
-       )
+    ;;;´íÎó´¦Àíº¯Êı
+    (defun *Error* (msg) 
+        (if (= msg "quit / exit abort") 
+            (princ err_msg) ;Ö÷¶¯ÍË³öÊ±£¬Êä³ö×Ô¶¨Òå´íÎóĞÅÏ¢
+            (progn (princ (strcat "\nError£º" msg))  ;ÆäËû´íÎó·¢ÉúÊ±£¬Êä³ö´íÎóĞÅÏ¢
+                   (setq *Error* nil)
+            )
+        )
     )
-    (cond
-      ((= pa "F")
-       (progn (setq fh (getreal "\næŒ‡å®šå­—é«˜ï¼š"))
-        (setq pa nil)
-       )
-      )
-      ((= pa "S")
-       (progn (setq sc (getreal "\næŒ‡å®šæ¯”ä¾‹ï¼š"))
-        (setq pa nil)
-       )
-      )
-      ((= pa "P")
-       (progn (setq pre (getint "\næŒ‡å®šç²¾åº¦ï¼š"))
-        (setq pa nil)
-       )
-      )
-      ((= pa "E")
-       (progn (initget 1 "Y N")
-        (setq exc (getkword "\næ˜¯å¦äº¤æ¢X Yåæ ‡[æ˜¯(Y)/å¦(N)]<Y>:"))
-        (setq pa nil)
-       )
-      )
-      ((= pa nil)
-      )
-      (T (setq cyc T))
+
+    ;;;¼ÆËãÎÄ×Ö²åÈëµãºÍÒıÏßÄ©µãº¯Êı
+    (defun poi_calc (sl) 
+        (if (>= (car pb) (car pa)) 
+            ;²åÈëÎ»ÖÃÔÚ±ê×¢µãÓÒ²à
+            (setq ta (list (car pb) (+ (cadr pb) (/ fh 2)) 0)
+                  tb (list (car pb) (- (cadr pb) (/ fh 2)) 0)
+                  pc (list (+ (car pb) sl) (cadr pb) 0)
+            )
+            ;²åÈëÎ»ÖÃÔÚ±ê×¢µã×ó²à
+            (setq ta (list (- (car pb) sl) (+ (cadr pb) (/ fh 2)) 0)
+                  tb (list (car ta) (- (cadr pb) (/ fh 2)) 0)
+                  pc (list (car ta) (cadr pb) 0)
+            )
+        )
     )
-  )
-  (setq cyc nil)
 
-;;;è·å–åæ ‡å€¼
-  (if (= exc "N")
-    (progn (setq Y (rtos (* (cadr pa) sc) 2 pre))
-     (setq X (rtos (* (car pa) sc) 2 pre))
+    ;;;³ÌĞò¼ÓÔØ³õÊ¼»¯ÉèÖÃ
+    (if (= fh nil) 
+        (setq fh 2.5)
     )
-    (progn (setq X (rtos (* (cadr pa) sc) 2 pre))
-     (setq Y (rtos (* (car pa) sc) 2 pre))
+    (if (= sc nil) 
+        (setq sc 0.001)
     )
-  )
-  (setq X (strcat "X=" X))
-  (setq Y (strcat "Y=" Y))
-  (setvar "DimZin" DimZin_Old)
+    (if (= pre nil) 
+        (setq pre 3)
+    )
+    (if (= exc nil) 
+        (setq exc "Y")
+    )
+    (progn 
+        (princ "\nµ±Ç°²ÎÊıÖµ  ×Ö¸ß=")
+        (princ fh)
+        (princ "  ±ÈÀı=")
+        (princ sc)
+        (princ "  ¾«¶È=")
+        (princ pre)
+        (princ "  ½»»»X Y×ø±ê=")
+        (princ exc)
+    )
 
-;;;æ ¹æ®åæ ‡å­—ç¬¦ä¸²é•¿åº¦è®¡ç®—å¼•çº¿æ°´å¹³æ®µé•¿åº¦
-;;;****************************************************************
-;;;2015.12.31 æœ¬æ®µä»£ç åœ¨æç«¯æƒ…å†µä¸‹ä¸èƒ½å®ç°å¼•çº¿ä¸æ–‡å­—å¯¹é½
-;;;ä¾‹å¦‚X=11111.111,Y=88888.888   ,åŸå› æ˜¯å„å­—ç¬¦ä¸ç­‰å®½
-;;;ä¸€èˆ¬æƒ…å†µå‡é€‚ç”¨ï¼Œä¸”ç†è®ºä¸Šæ‰§è¡Œé€Ÿåº¦æ¯”æ›´æ–°åçš„ä»£ç å¿«
-;;;  (setq tbox (textbox (list
-;;;                        '(0 . "text")
-;;;         (cons 40 fh)
-;;;         (cons 1
-;;;           (if (>= (strlen X) (strlen Y))
-;;;                            X
-;;;                            Y
-;;;           )
-;;;                        )
-;;;                      )
-;;;             )
-;;;  )
-;;;  (setq sl (- (car (cadr tbox)) (car (car tbox))))
-;;;****************************************************************
-;;;ä»¥ä¸‹ä¸ºæ›´æ–°åçš„ä»£ç ï¼Œä»»ä½•æƒ…å†µéƒ½èƒ½å®ç°å¼•çº¿ä¸æ–‡å­—å¯¹é½
-  (setq  tbox_x (textbox  (list
-        '(0 . "text")
-        (cons 40 fh)
-        (cons 1 X)
-        (cons 7 (getvar "textstyle"))
-      )
-         )
-  )
-  (setq  tbox_y (textbox  (list
-        '(0 . "text")
-        (cons 40 fh)
-        (cons 1 Y)
-        (cons 7 (getvar "textstyle"))
-      )
-         )
-  )
-  (if (>= (car (cadr tbox_x)) (car (cadr tbox_y)))
-    (setq sl (car (cadr tbox_x)))
-    (setq sl (car (cadr tbox_y)))
-  )
+    ;;;Ö¸¶¨Ğè±ê×¢µÄµã»òÉèÖÃ×Ö¸ß¡¢±ÈÀı¡¢¾«¶È¡¢½»»»X Y×ø±ê
+    (setq pa nil)
+    (while (= pa nil) 
+        (initget "F S P E")
+        (setq pa (getpoint 
+                     "\nÖ¸¶¨Òª±ê×¢µÄ×ø±êµã »ò [×Ö¸ß(F)/±ÈÀı(S)/¾«¶È(P)/½»»»X Y×ø±ê(E)]:"
+                 )
+        )
+        (cond 
+            ((= pa "F")
+             (setq pa     nil
+                   fh_old fh
+             )
+             (setq fh (getreal (strcat "\nÖ¸¶¨×Ö¸ß<" (rtos fh 2) ">£º")))
+             (if (= fh nil) (setq fh fh_old))
+             (princ (strcat "µ±Ç°×Ö¸ß=" (rtos fh 2)))
+            )
+            ((= pa "S")
+             (setq pa     nil
+                   sc_old sc
+             )
+             (setq sc (getreal (strcat "\nÖ¸¶¨±ÈÀı<" (rtos sc 2) ">£º")))
+             (if (= sc nil) (setq sc sc_old))
+             (princ (strcat "µ±Ç°±ÈÀı=" (rtos sc 2)))
+            )
+            ((= pa "P")
+             (setq pa      nil
+                   pre_old pre
+             )
+             (setq pre (getint (strcat "\nÖ¸¶¨¾«¶È<" (rtos pre 2 0) ">£º")))
+             (if (= pre nil) (setq pre pre_old))
+             (princ (strcat "µ±Ç°¾«¶È=" (rtos pre 2 0)))
+            )
+            ((= pa "E")
+             (setq pa nil)
+             (initget 1 "Y N")
+             (setq exc (getkword (strcat "\nÊÇ·ñ½»»»X Y×ø±ê[ÊÇ(Y)/·ñ(N)]<" exc ">£º")))
+             (princ 
+                 (strcat "µ±Ç°½»»»×ø±ê=" 
+                         (cond 
+                             ((= exc "Y") "ÊÇ")
+                             ((= exc "N") "·ñ")
+                         )
+                 )
+             )
+            )
+            ((= pa nil) (progn (setq err_msg "È¡Ïû") (quit)))
+            (T)
+        )
+    )
 
-;;;ä¸´æ—¶æŒ‡å®šæ–‡å­—æ’å…¥ç‚¹å¹¶è®¡ç®—å„ä¸ªæ’å…¥ç‚¹åˆå§‹å€¼ï¼Œåœ¨ç¨‹åºè¿è¡Œä¸­ä¸æ–­æ›´æ–°
-  (setq pb pa)
-  (poi_calc sl)
-  (princ "\næŒ‡å®šæ–‡å­—æ’å…¥ç‚¹ï¼š")
+    ;;;»ñÈ¡×ø±êÖµ
+    (setq DimZin_Old (getvar "DimZin"))
+    (setvar "DimZin" 1) ;Ğ¡ÊıÄ©Î²0²»Ïû³ı
+    (if (= exc "N") 
+        (setq Y (rtos (* (cadr pa) sc) 2 pre)
+              X (rtos (* (car pa) sc) 2 pre)
+        )
+        (setq X (rtos (* (cadr pa) sc) 2 pre)
+              Y (rtos (* (car pa) sc) 2 pre)
+        )
+    )
+    (setvar "DimZin" DimZin_Old) ;»Ö¸´»·¾³±äÁ¿
+    (setq X      (strcat "X=" X)
+          Y      (strcat "Y=" Y)
+          tbox_x (textbox 
+                     (list 
+                         '(0 . "text")
+                         (cons 40 fh)
+                         (cons 1 X)
+                         (cons 7 (getvar "textstyle"))
+                     )
+                 )
+          tbox_y (textbox 
+                     (list 
+                         '(0 . "text")
+                         (cons 40 fh)
+                         (cons 1 Y)
+                         (cons 7 (getvar "textstyle"))
+                     )
+                 )
+    )
+    ;;;¸ù¾İ×ø±ê×Ö·û´®³¤¶È¼ÆËãÒıÏßË®Æ½¶Î³¤¶È
+    (if (>= (car (cadr tbox_x)) (car (cadr tbox_y))) 
+        (setq sl (car (cadr tbox_x)))
+        (setq sl (car (cadr tbox_y)))
+    )
 
-;;;è¾“å‡ºæ–‡å­—
-  (prin_mtxt ta x fh 7)
-  (setq engl_t1 (entget (entlast)))
-  (prin_mtxt tb y fh 1)
-  (setq engl_t2 (entget (entlast)))
-
-;;;ç”»å¼•çº¿
-  (prin_pl pa pb pc)
-  (setq engl_pl (entget (entlast)))
-
-;;;å®æ—¶é¢„è§ˆ
-  (while (= (car (setq mouse (grread t 13 0))) 5)
-    (setq pb (cadr mouse))
+    ;;;ÁÙÊ±Ö¸¶¨ÎÄ×Ö²åÈëµã²¢¼ÆËã¸÷¸ö²åÈëµã³õÊ¼Öµ£¬ÔÚ³ÌĞòÔËĞĞÖĞ²»¶Ï¸üĞÂ
+    (setq pb pa)
     (poi_calc sl)
-    (progn
-      (setq engl_t1 (subst (cons 10 ta) (assoc 10 engl_t1) engl_t1))
-      (entmod engl_t1)
-      (setq engl_t2 (subst (cons 10 tb) (assoc 10 engl_t2) engl_t2))
-      (entmod engl_t2)
-          ;ç”»å¼•çº¿ï¼šå…ˆåˆ é™¤ï¼Œå†é‡ç»˜
-;;;****************************************************************
-;;;Ã—Ã—Ã—Ã—Ã—Ã—ä¸çŸ¥å¦‚ä½•æ›´æ–°å¤šæ®µçº¿å¤šä¸ªé¡¶ç‚¹å€¼ï¼Œæš‚å¦‚æ­¤å¤„ç†Ã—Ã—Ã—Ã—Ã—Ã—
-;;;****************************************************************
-      (entdel (cdr (car engl_pl)))
-      (prin_pl pa pb pc)
-      (setq engl_pl (entget (entlast)))
-    )
-  )
+    (princ "\nÖ¸¶¨ÎÄ×Ö²åÈëµã£º")
 
-  (prin1)
+    ;;;ÁÙÊ±Êä³öÎÄ×Ö
+    (prin_mtxt ta x fh 7)
+    (setq engl_t1 (entget (entlast)))
+    (prin_mtxt tb y fh 1)
+    (setq engl_t2 (entget (entlast)))
+
+    ;;;ÁÙÊ±»­ÒıÏß
+    (prin_pl pa pb pc)
+    (setq engl_pl (entget (entlast)))
+
+    ;;;ÊµÊ±Ô¤ÀÀ
+    (while (= (car (setq mouse (grread t 13 0))) 5) 
+        (setq pb (cadr mouse))
+        (poi_calc sl)
+        (progn 
+            (setq engl_t1 (subst (cons 10 ta) (assoc 10 engl_t1) engl_t1))
+            (entmod engl_t1)
+            (setq engl_t2 (subst (cons 10 tb) (assoc 10 engl_t2) engl_t2))
+            (entmod engl_t2)
+            ;»­ÒıÏß£ºÏÈÉ¾³ı£¬ÔÙÖØ»æ
+            ;;;****************************************************************
+            ;;;¡Á¡Á¡Á¡Á¡Á¡Á²»ÖªÈçºÎ¸üĞÂ¶à¶ÎÏß¶à¸ö¶¥µãÖµ£¬ÔİÈç´Ë´¦Àí¡Á¡Á¡Á¡Á¡Á¡Á
+            ;;;****************************************************************
+            (entdel (cdr (car engl_pl)))
+            (prin_pl pa pb pc)
+            (setq engl_pl (entget (entlast)))
+        )
+    )
+
+    (prin1)
 )
 
-;;;è®¡ç®—æ–‡å­—æ’å…¥ç‚¹å’Œå¼•çº¿æœ«ç‚¹å‡½æ•°
-(defun poi_calc  (sl)
-  (if (>= (car pb) (car pa))
-          ;æ’å…¥ä½ç½®åœ¨æ ‡æ³¨ç‚¹å³ä¾§
-    (setq ta (list (car pb) (+ (cadr pb) (/ fh 2)) 0)
-    tb (list (car pb) (- (cadr pb) (/ fh 2)) 0)
-    pc (list (+ (car pb) sl) (cadr pb) 0)
+        ;;;»æÖÆÎÄ×Öº¯Êı
+(defun prin_mtxt (point txt fh position) 
+    (entmake 
+        (list 
+            '(0 . "MText")
+            '(100 . "AcDbEntity")
+            '(100 . "AcDbMText")
+            (list 10 (car point) (cadr point))
+            (cons 40 fh)
+            (cons 71 position)
+            (cons 1 txt)
+            (cons 7 (getvar "textstyle"))
+        )
     )
-          ;æ’å…¥ä½ç½®åœ¨æ ‡æ³¨ç‚¹å·¦ä¾§
-    (setq ta (list (- (car pb) sl) (+ (cadr pb) (/ fh 2)) 0)
-    tb (list (car ta) (- (cadr pb) (/ fh 2)) 0)
-    pc (list (car ta) (cadr pb) 0)
-    )
-  )
 )
 
-;;;ç»˜åˆ¶æ–‡å­—å‡½æ•°
-(defun prin_mtxt (point txt fh position)
-  (entmake (list
-       '(0 . "MText")
-       '(100 . "AcDbEntity")
-       '(100 . "AcDbMText")
-       (list 10 (car point) (cadr point))
-       (cons 40 fh)
-       (cons 71 position)
-       (cons 1 txt)
-       (cons 7 (getvar "textstyle"))
-     )
-  )
-)
-
-;;;ç»˜åˆ¶å¼•çº¿å‡½æ•°
-(defun prin_pl (p1 p2 p3)
-  (entmake (list '(0 . "LWPOLYLINE")
-     '(100 . "AcDbEntity")
-     '(100 . "AcDbPolyline")
-     (cons 90 3)
-     (cons 10 p1)
-     (cons 10 p2)
-     (cons 10 p3)
-     )
-  )
+        ;;;»æÖÆÒıÏßº¯Êı
+(defun prin_pl (p1 p2 p3) 
+    (entmake 
+        (list '(0 . "LWPOLYLINE") 
+              '(100 . "AcDbEntity")
+              '(100 . "AcDbPolyline")
+              (cons 90 3)
+              (cons 10 p1)
+              (cons 10 p2)
+              (cons 10 p3)
+        )
+    )
 )

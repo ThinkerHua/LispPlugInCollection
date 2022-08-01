@@ -34,12 +34,12 @@
                       )
     )
     (princ information)
-    (setq selction (ssget "I" '((0 . "TEXT,MTEXT"))))
+    (setq selction (ssget "I" '((0 . "TEXT,MTEXT")))) ;先选文字再执行
     (if (= selction nil) 
         (setq loop T)
         (setq loop nil)
     )
-    (while (= loop T) 
+    (while (= loop T)  ;先执行再选文字
         (initget 0 "S F M")
         (setq option (getkword 
                          "\n选择操作：[选择文字(S)/导出文件(F)/写入模式(M)/]<S>:"

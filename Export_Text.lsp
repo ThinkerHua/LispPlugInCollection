@@ -8,7 +8,7 @@
             ) 
     (defun *Error* (msg) 
         (if (= msg "quit / exit abort") 
-            (princ err_msg) ;主动退出时，输出自定义错误信息
+            (if (/= err_msg nil) (princ err_msg)) ;主动退出时，输出自定义错误信息
             (progn (princ (strcat "\nError:" msg))  ;其他错误发生时，输出错误信息
                    (setq *Error* nil)
             )

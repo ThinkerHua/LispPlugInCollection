@@ -58,8 +58,8 @@
           rpos   (1- (vl-position (cadr pos) (vl-sort (cons (cadr pos) lpylist) '>))) ;Row Position
            ;研读注记 by Thinker at 2022/08/04：有必要将文本中心点组进列表？
            ;CAD Y轴从下往上，EXCEL Y轴（行号）从上往下，所以降序排列
-          cpos   (1- (vl-position (car pos) (vl-sort (cons (car pos) lpxlist) '<)))
-    ) ;Column Position
+          cpos   (1- (vl-position (car pos) (vl-sort (cons (car pos) lpxlist) '<))) ;Column Position
+    )
     (if (setq expos (vl-position (list rpos cpos) (mapcar '(lambda (x) (cdr (assoc "Position" x))) tinfo)))  ;if cell is taken
         (setq tinfo (replace 
                         tinfo

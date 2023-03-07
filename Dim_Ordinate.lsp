@@ -2,9 +2,7 @@
 (princ "启动命令：ZB")
 (princ "  功能：坐标标注")
 (princ "  作者：Thinker(ThinkerHua@hotmail.com)")
-(defun c:zb (/ pa pb pc ta tb X Y tbox_x tbox_y sl DimZin_Old mouse engl_t1 engl_t2 engl_pl 
-             err_msg fh_old sc_old pre_old
-            ) 
+(defun c:zb (/ pa pb pc ta tb X Y tbox_x tbox_y sl DimZin_Old mouse engl_t1 engl_t2 engl_pl err_msg fh_old sc_old pre_old) 
     ;;;pa pb pc为引线(多段线)顶点, ta tb为文字基点
     ;;;X Y为坐标, tbox_x tbox_y为判断文字对象长度用临时坐标存储器
     ;;;sl为文字对象长度(亦即引线水平段长)
@@ -84,9 +82,9 @@
              (setq pa     nil
                    sc_old sc
              )
-             (setq sc (getreal (strcat "\n指定比例<" (rtos sc 2) ">：")))
+             (setq sc (getreal (strcat "\n指定比例<" (rtos sc 2 3) ">：")))
              (if (= sc nil) (setq sc sc_old))
-             (princ (strcat "当前比例=" (rtos sc 2)))
+             (princ (strcat "当前比例=" (rtos sc 2 3)))
             )
             ((= pa "P")
              (setq pa      nil
